@@ -333,13 +333,13 @@ const SamplePage5 = () => {
   return (
     <div className="content">
       <p className="Location">
-        <a className="btn_set home">메인으로</a>{" "}
-        <span className="btn_nav bold">시설 관리</span>{" "}
-        <span className="btn_nav bold"> 강의실</span>{" "}
+        <a className="btn_set home">메인으로</a>
+        <span className="btn_nav bold">시설 관리</span>
+        <span className="btn_nav bold"> 강의실</span>
         <a className="btn_set refresh">새로고침</a>
       </p>
       <p className="conTitle">
-        <span>강의실</span>{" "}
+        <span>강의실</span>
         <span className="fr">
           <span style={searchstyle}>강의실 명 </span>
           <input
@@ -429,7 +429,7 @@ const SamplePage5 = () => {
       {equdis && (
         <div>
           <p className="conTitle">
-            <span>장비 목록</span>{" "}
+            <span>장비 목록</span>
             <span className="fr">
               <button
                 className="btn btn-primary"
@@ -509,7 +509,6 @@ const SamplePage5 = () => {
             <tbody>
               <tr>
                 <th>
-                  {" "}
                   강의실명 <span className="font_red">*</span>
                 </th>
                 <td colSpan="3">
@@ -526,7 +525,6 @@ const SamplePage5 = () => {
               </tr>
               <tr>
                 <th>
-                  {" "}
                   강의실 크기<span className="font_red">*</span>
                 </th>
                 <td>
@@ -541,7 +539,6 @@ const SamplePage5 = () => {
                   />
                 </td>
                 <th>
-                  {" "}
                   강의실 자릿수<span className="font_red">*</span>
                 </th>
                 <td>
@@ -575,25 +572,21 @@ const SamplePage5 = () => {
           <div className="modal-button">
             {isroomRegBtn && (
               <button className="btn btn-primary mx-2" onClick={roomreg}>
-                {" "}
-                등록{" "}
+                등록
               </button>
             )}
             {!isroomRegBtn && (
               <button className="btn btn-primary mx-2" onClick={roomreg}>
-                {" "}
-                수정{" "}
+                수정
               </button>
             )}
             {!isroomRegBtn && (
               <button className="btn btn-primary mx-2" onClick={roomdel}>
-                {" "}
-                삭제{" "}
+                삭제
               </button>
             )}
             <button className="btn btn-primary" onClick={closeroomModal}>
-              {" "}
-              닫기{" "}
+              닫기
             </button>
           </div>
         </div>
@@ -612,7 +605,6 @@ const SamplePage5 = () => {
             <tbody>
               <tr>
                 <th>
-                  {" "}
                   장비명 <span className="font_red">*</span>
                 </th>
                 <td>
@@ -627,7 +619,6 @@ const SamplePage5 = () => {
                   />
                 </td>
                 <th>
-                  {" "}
                   장비수<span className="font_red">*</span>
                 </th>
                 <td>
@@ -661,25 +652,21 @@ const SamplePage5 = () => {
           <div className="modal-button">
             {isequRegBtn && (
               <button className="btn btn-primary mx-2" onClick={equreg}>
-                {" "}
-                등록{" "}
+                등록
               </button>
             )}
             {!isequRegBtn && (
               <button className="btn btn-primary mx-2" onClick={equreg}>
-                {" "}
-                수정{" "}
+                수정
               </button>
             )}
             {!isequRegBtn && (
               <button className="btn btn-primary mx-2" onClick={equdel}>
-                {" "}
-                삭제{" "}
+                삭제
               </button>
             )}
             <button className="btn btn-primary" onClick={closeequModal}>
-              {" "}
-              닫기{" "}
+              닫기
             </button>
           </div>
         </div>
