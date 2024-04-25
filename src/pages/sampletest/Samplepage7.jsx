@@ -5,7 +5,7 @@ import * as commonjs from "../../components/common/commonfunction.js";
 
 import Modal from "react-modal";
 
-const SamplePage5 = () => {
+const SamplePage7 = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [equcurrentPage, setEqucurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
@@ -688,4 +688,4 @@ const SamplePage5 = () => {
   );
 };
 
-export default SamplePage5;
+export default SamplePage7;
