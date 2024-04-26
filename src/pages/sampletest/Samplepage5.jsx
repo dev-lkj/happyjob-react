@@ -333,10 +333,10 @@ const SamplePage5 = () => {
   return (
     <div className="content">
       <p className="Location">
-        <a className="btn_set home">메인으로</a>
+        <a href="#none" className="btn_set home">메인으로</a>
         <span className="btn_nav bold">시설 관리</span>
         <span className="btn_nav bold"> 강의실</span>
-        <a className="btn_set refresh">새로고침</a>
+        <a href="#none" className="btn_set refresh">새로고침</a>
       </p>
       <p className="conTitle">
         <span>강의실</span>
