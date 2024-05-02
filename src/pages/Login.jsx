@@ -3,14 +3,18 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import Session from "react-session-api";
 import logo_img from "../assets/images/admin/login/logo_img.png";
+import RegisterModal from '../components/modal/RegisterModal';
+import FindIdPwModal from "../components/modal/FindIdPwModal";
 
 import Modal from "react-modal";
+
 
 const Login = () => {
   
   const [isRegisterModalPop, setIsRegisterModalPop] = useState(false);
-  const [isTypeSelected, setIsTypeSelected] = useState(true);
-  const [isRegisterButton, setIsRegisterButton] = useState(false);
+  const [isFindIdPwModalPop, setIsFindIdPwModalPop] = useState(false);
+
+  
 
 
   useEffect(() => {
@@ -25,10 +29,6 @@ const Login = () => {
     userPw: "",
   });
 
-  const linkTest = (e) => {
-    console.log("linkTest start");
-    console.log(e);
-  };
 
   const onKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -106,16 +106,10 @@ const Login = () => {
     setIsRegisterModalPop(false);
   };
 
-  const modalStyle = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-      transform: "translate(-50%, -50%)",
-    },
+  const closeFindIdPwModal = () => {
+    setIsFindIdPwModalPop(false);
   };
+
 
 
   return (
@@ -124,7 +118,7 @@ const Login = () => {
         <div className="login_form shadow">
           <div className="login-form-right-side">
             <div className="top-logo-wrap">
-              <img id="login-logo" src={logo_img} />
+              <img id="login-logo" src={logo_img} alt="logo_img" />
             </div>
             <h3> 안되는 것이 실패가 아니라 포기하는 것이 실패다 </h3>
             <p>
@@ -168,10 +162,10 @@ const Login = () => {
                 <span className="id_save"> ID저장 </span>
               </p>
               <div>
-                <a href="#none" id="RegisterBtn" name="modal" onClick={()=> {setIsRegisterModalPop(true)}}>
+                <a href={()=>false} id="RegisterBtn" name="modal" onClick={()=> {setIsRegisterModalPop(true)}}>
                   <strong> [회원가입] </strong>
                 </a>
-                <a href="#none">
+                <a href={()=>false} id="FindIdPwBtn" name="modal" onClick={() => {setIsFindIdPwModalPop(true)}}>
                   <strong> [아이디 / 비밀번호 찾기] </strong>
                 </a>
                 {/* <a onClick={linkTest}>
@@ -185,9 +179,11 @@ const Login = () => {
           </div>
         </div>
       </div>
-
-
-      <Modal
+      {/* 회원가입, 아이디/비밀번호 찾기 영역 */}
+      <RegisterModal isOpen={isRegisterModalPop} onRequestClose={closeRegisterModal}/>
+      <FindIdPwModal isOpen={isFindIdPwModalPop} onRequestClose={closeFindIdPwModal}/>
+              
+      {/* <Modal
         style={modalStyle}
         isOpen={isRegisterModalPop}
         onRequestClose={closeRegisterModal}
@@ -310,8 +306,7 @@ const Login = () => {
                   <input
                     type="text"
                     className="form-control input-sm"
-                    
-                    
+                  
                   />
                 </td>
               </tr>
@@ -371,7 +366,7 @@ const Login = () => {
           </div>
           
         </div>
-      </Modal>
+      </Modal> */}
 
     </>
   );
