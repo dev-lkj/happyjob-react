@@ -8,7 +8,6 @@ const FindIdPw = (props) =>{
     // 아이디찾기, 비밀번호 찾기 버튼 상태 영역
     const [isFindId, setIsFindId] = useState(false);
     const [isFindPwd, setIsFindPwd] = useState(false);
-    const [isOkayUserInfo, setIsOkayUserInfo] = useState(false);    
 
     // 아이디 찾기, 비밀번호 찾기 입력 값 영역
     const [nameForId, setNameForId] = useState('');
@@ -24,23 +23,30 @@ const FindIdPw = (props) =>{
     const [foundId, setFoundId] = useState('');
     // 아이디 찾기 Form 결과 보이는 영역
     const [isBeforeFindPwdFormVisible , setIsBeforeFindPwdFormVisible ] = useState(true);
-    const [isAfterFindPwdFormVisible , setIsAfterFindPwdFormVisible ] = useState(false);
-    
-    // 아이디 찾기 유효성 검사를 위한 name, email ref 영역(focus)
-    const inputNameRef = useRef(null);
+    const [isOkayUserInfoForPwd, setIsOkayUserInfoForPwd] = useState(false);    
+
+    // 아이디 찾기, 비밀번호 유효성 검사를 위한 name, id, email ref 영역(focus)
+    const inputNameForIdRef = useRef(null);
     const inputEmailForIdRef = useRef(null);
+    const inputIdForPwdRef = useRef(null);
+    const inputEmailForPwdRef = useRef(null);
+    const inputNewPassword1Ref = useRef(null);
+    const inputNewPassword2Ref = useRef(null);
 
 
     // 아이디 찾기 영역 활성화
     const selectId = () => {
         setIsFindPwd(false)
-        setIsOkayUserInfo(false)
+        setIsOkayUserInfoForPwd(false)
+        setIsAfterFindIdFormVisible(false)
+        setIsBeforeFindIdFormVisible(true)
         setIsFindId(true)
     };
     // 비밀번호 찾기 영역 활성화
     const selectPwd = () => {
         setIsFindId(false)
-        setIsOkayUserInfo(false)
+        setIsOkayUserInfoForPwd(false)
+        setIsBeforeFindPwdFormVisible(true)
         setIsFindPwd(true)
     };
 
@@ -49,7 +55,7 @@ const FindIdPw = (props) =>{
         // 유효성
         if(nameForId===null || nameForId ===""){
             alert("이름을 입력하세요.");
-            inputNameRef.current.focus();
+            inputNameForIdRef.current.focus();
             return;
         }
         // 이메일 유효성 check
@@ -79,7 +85,7 @@ const FindIdPw = (props) =>{
                 setIsAfterFindIdFormVisible(true);
             } else {
                 alert("일치하는 정보가 존재하지 않습니다.");
-                inputNameRef.current.focus();
+                inputNameForIdRef.current.focus();
             }
 
         })
@@ -90,14 +96,98 @@ const FindIdPw = (props) =>{
     };
 
     // 비밀번호 찾기를 위한 유저 확인
-    const checkUserInfo = () => {
-        // if(){
-        setIsOkayUserInfo(true);
-        // }
+    const checkUserInfoForPwd = async () => {
+        if(idForPwd===null || idForPwd ===""){
+            alert("아이디를 입력하세요.");
+            inputIdForPwdRef.current.focus();
+            //$("#regiId").focus();
+            return;
+        }
+    
+        if(emailForPwd===null || emailForPwd ==="" || emailForPwd === "null"){
+            alert("이메일을 입력하세요.");
+            return;
+        }
+        
+        // 이메일 유효성 check
+        var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!regex.test(emailForPwd)) {
+            alert("올바른 형식의 이메일을 입력하세요.");
+            inputEmailForPwdRef.current.focus();
+        } 
+
+
+        let params = new URLSearchParams()
+        params.append('id', idForPwd);
+        params.append('mail', emailForPwd);        
+
+        await axios
+        .post('/selectFindInfoPw.do', params)
+        .then((response) => {
+            const data = response.data;
+            
+            //alert(JSON.stringify(data)+" data check");
+            console.log('findPW res', response);
+            
+            if(data.result==="SUCCESS"){
+                setIsBeforeFindPwdFormVisible(false);
+                setIsOkayUserInfoForPwd(true);
+            } else {
+                alert("일치하는 정보가 존재하지 않습니다.");
+                setIsOkayUserInfoForPwd(false);
+                setIsBeforeFindPwdFormVisible(true);
+                //inputIdForPwdRef.current.focus();
+            }
+
+        })
+        .catch((err) => {
+            console.log('findPW catch start')
+            alert(err.message)
+        })
     };
 
-    const changePassword = () => {
+    const changePassword = async () => {
+        // 유효성
+        if(newPassword2!==newPassword1){
+            alert("비밀번호가 일치하지 않습니다.");
+            inputNewPassword2Ref.current.focus();
+            return;
+        }
 
+        /*패스워드 정규식*/
+        var passwordRules = /^.*(?=^.{8,15}$)(?=.*\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$/;
+        if(!passwordRules.test(newPassword1)){
+            alert('비밀 번호는 숫자,영문자,특수문자 조합으로 8~15자리를 사용해야 합니다.');
+            inputNewPassword1Ref.current.focus();
+            return;
+        }
+
+        let params = new URLSearchParams()
+        params.append('id', idForPwd);
+        params.append('pw', newPassword1);        
+
+        await axios
+        .post('/updateFindPw.do', params)
+        .then((response) => {
+            const data = response.data;
+            //alert(JSON.stringify(data)+" data check");
+            console.log('findPW res', response);
+            
+
+            if(data.result=="SUCCESS"){
+                alert("비밀번호가 변경되었습니다.\n변경된 비밀번호로 로그인해주세요.");
+
+                closeRegisterModal();
+            } else {
+                alert("비밀번호 변경이 실패하였습니다.\n지속적으로 오류가 발생한다면 관리자에게 문의해주세요.");
+                selectPwd();
+            }
+
+        })
+        .catch((err) => {
+            console.log('ChangePW catch start')
+            alert(err.message)
+        })
     };
 
     const closeRegisterModal = () => {
@@ -114,6 +204,7 @@ const FindIdPw = (props) =>{
             transform: "translate(-50%, -50%)",
         },
     };
+    
     return(
         <>
         <Modal
@@ -155,7 +246,7 @@ const FindIdPw = (props) =>{
                                     <input type="text" id="regiName" name="regiName" className="inputTxt p100"
                                     placeholder="가입하신 이름을 입력하세요"
                                     onChange={(e) => setNameForId(e.target.value)}
-                                    ref={inputNameRef}
+                                    ref={inputNameForIdRef}
                                     />
                                 </td>
                             </tr>
@@ -196,7 +287,8 @@ const FindIdPw = (props) =>{
                             <col style={{width : "150px"}} />
                             <col style={{width : "auto"}} />
                         </colgroup>
-						<tbody id="beforeChangeForm">
+						{isBeforeFindPwdFormVisible && (
+                        <tbody id="beforeChangeForm">
 							<tr>
 								<th scope="row">
 									아이디
@@ -204,7 +296,8 @@ const FindIdPw = (props) =>{
 								<td>
 									<input type="text" id="regiId" name="regiId"  className="inputTxt p100"
 									placeholder="가입하신 아이디를 입력하세요"
-                                    onClick={(e) => setIdForPwd(e.target.value)}
+                                    onChange={(e) => setIdForPwd(e.target.value)}
+                                    ref={inputIdForPwdRef}
                                     />
 								</td>
 							</tr>
@@ -215,20 +308,21 @@ const FindIdPw = (props) =>{
 								<td>
 									<input type="text" id="emailPwd" className="inputTxt p100"
 									placeholder="가입하신 이메일을 입력하세요" size="30"
-                                    onChagne={(e) => setEmailForPwd(e.target.value)}
+                                    onChange={(e) => setEmailForPwd(e.target.value)}
+                                    ref={inputEmailForPwdRef}
 									/> 
 								</td>
 							</tr>
 							<tr>
 								<td colSpan="2" style={{border: 'none', textAlign: 'center', backgroundColor: '#F3F3F3' }}>
 									<a href={() => false} className="btnType blue" id="findIdSubmit"
-									onClick={() => {checkUserInfo()}}>
+									onClick={() => {checkUserInfoForPwd()}}>
 									<span>확인</span></a>
 								</td>
 							</tr>
 						</tbody>
-                        
-						{isOkayUserInfo && (
+                        )}
+						{isOkayUserInfoForPwd && (
                         <tbody id="afterChangeForm">
 							<tr>
 								<th scope="row">변경할 비밀번호</th>
@@ -236,6 +330,7 @@ const FindIdPw = (props) =>{
 									<input type="password" id="reRegiPwd" name="reRegiPwd"  className="inputTxt p100"
 									placeholder="숫자,영문자,특수문자 조합으로 8~15자리"
                                     onChange={(e) => setNewPassword1(e.target.value)}
+                                    ref={inputNewPassword1Ref}
                                     />
 								</td>
 							</tr>
@@ -244,6 +339,7 @@ const FindIdPw = (props) =>{
 								<td>
 									<input type="password" id="reRegiPwdCheck" name="reRegiPwdCheck" className="inputTxt p100"
                                     onChange={(e) => setNewPassword2(e.target.value)}
+                                    ref={inputNewPassword2Ref}
 									/> 
 								</td>
 							</tr>

@@ -172,7 +172,7 @@ const Login = () => {
                   <Link to="/left"> left </Link>
                 </a> */}
               </div>
-              <a href="#none" className="btn_login" id="btn_login" onClick={fLoginProc}>
+              <a href={()=>false} className="btn_login" id="btn_login" onClick={fLoginProc}>
                 <strong> Login </strong>
               </a>
             </fieldset>
